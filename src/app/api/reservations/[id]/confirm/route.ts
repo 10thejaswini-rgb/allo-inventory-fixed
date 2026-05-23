@@ -105,11 +105,11 @@ export async function POST(
 
         const { reservation } = result;
         if (!reservation) {
-  return NextResponse.json(
-    { error: "Reservation not found" },
-    { status: 404 }
-  );
-}
+          return NextResponse.json(
+            { error: "Reservation not found" },
+            { status: 404 }
+          );
+        }
         const dto: ReservationDTO = {
           id: reservation.id,
           productId: reservation.productId,
