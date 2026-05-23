@@ -57,8 +57,8 @@ export async function POST(
             // Mark as released and restore stock
             await tx.$executeRaw`
               UPDATE "StockLevel"
-              SET "reservedUnits" = "reservedUnits" - ${res.quantity},
-                  "updatedAt" = now()
+              SET "reservedUnits" = "reservedUnits" - ${res.quantity}
+                  
               WHERE "productId" = ${res.product_id} AND "warehouseId" = ${res.warehouse_id}
             `;
             await tx.reservation.update({
@@ -72,8 +72,8 @@ export async function POST(
           await tx.$executeRaw`
             UPDATE "StockLevel"
             SET "totalUnits" = "totalUnits" - ${res.quantity},
-                "reservedUnits" = "reservedUnits" - ${res.quantity},
-                "updatedAt" = now()
+                "reservedUnits" = "reservedUnits" - ${res.quantity}
+                
             WHERE "productId" = ${res.product_id} AND "warehouseId" = ${res.warehouse_id}
           `;
 

@@ -77,8 +77,8 @@ export async function POST(request: NextRequest) {
           // Increment reserved units
           await tx.$executeRaw`
             UPDATE "StockLevel"
-            SET "reservedUnits" = "reservedUnits" + ${quantity},
-                "updatedAt" = now()
+            SET "reservedUnits" = "reservedUnits" + ${quantity}
+              
             WHERE id = ${stock.id}
           `;
 

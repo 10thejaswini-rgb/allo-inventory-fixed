@@ -26,8 +26,8 @@ export async function GET(
       await prisma.$transaction([
         prisma.$executeRaw`
           UPDATE "StockLevel"
-          SET "reservedUnits" = "reservedUnits" - ${reservation.quantity},
-              "updatedAt" = now()
+          SET "reservedUnits" = "reservedUnits" + ${quantity}
+          
           WHERE "productId" = ${reservation.productId} AND "warehouseId" = ${reservation.warehouseId}
         `,
         prisma.reservation.update({
