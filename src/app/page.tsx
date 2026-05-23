@@ -1,12 +1,33 @@
-// src/app/page.tsx
 import { ProductCard } from "@/components/ProductCard";
+import { prisma } from "@/lib/prisma";
 import type { ProductDTO } from "@/lib/schemas";
 
+export const dynamic = "force-dynamic";
+
 async function getProducts(): Promise<ProductDTO[]> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const res = await fetch(`${baseUrl}/api/products`, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to fetch products");
-  return res.json();
+  const products = await prisma.product.findMany({
+    include: {
+      stockLevels: {
+        include: { warehouse: true },
+      },
+    },
+    orderBy: { name: "asc" },
+  });
+
+  return products.map((p) => ({
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    imageUrl: p.imageUrl,
+    price: p.price,
+    stockLevels: p.stockLevels.map((s) => ({
+      warehouseId: s.warehouseId,
+      warehouseName: s.warehouse.name,
+      totalUnits: s.totalUnits,
+      reservedUnits: s.reservedUnits,
+      availableUnits: Math.max(0, s.totalUnits - s.reservedUnits),
+    })),
+  }));
 }
 
 export default async function HomePage() {
@@ -33,13 +54,6 @@ export default async function HomePage() {
       {error && (
         <div className="bg-[var(--danger-bg)] border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm mb-8">
           {error}
-        </div>
-      )}
-
-      {!error && products.length === 0 && (
-        <div className="text-center py-20 text-[var(--text-muted)]">
-          <p className="text-lg font-medium">No products found</p>
-          <p className="text-sm mt-1">Run the seed script to populate the database.</p>
         </div>
       )}
 
