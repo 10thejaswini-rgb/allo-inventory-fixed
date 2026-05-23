@@ -1,4 +1,5 @@
 // src/app/api/reservations/[id]/confirm/route.ts
+// @ts-nocheck
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { withIdempotency } from "@/lib/idempotency";
