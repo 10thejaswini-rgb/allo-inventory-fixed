@@ -1,15 +1,8 @@
-// src/app/api/cron/expire/route.ts
-/**
- * Called by Vercel Cron every minute: * * * * *
- * Configured in vercel.json
- *
- * Protected by CRON_SECRET so only Vercel (or authorized callers) can invoke it.
- */
-export const dynamic = "force-dynamic";
-
 import { NextRequest, NextResponse } from "next/server";
 import { releaseExpiredReservations } from "@/lib/expiry";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
