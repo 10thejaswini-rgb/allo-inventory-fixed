@@ -1,17 +1,15 @@
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { ProductDTO } from "@/lib/schemas";
-
-export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
 
 export async function GET() {
   try {
     const products = await prisma.product.findMany({
       include: {
-        stockLevels: {
-          include: { warehouse: true },
-        },
+        stockLevels: { include: { warehouse: true } },
       },
       orderBy: { name: "asc" },
     });
