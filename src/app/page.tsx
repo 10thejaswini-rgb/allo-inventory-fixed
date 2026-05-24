@@ -7,9 +7,7 @@ export const dynamic = "force-dynamic";
 async function getProducts(): Promise<ProductDTO[]> {
   const products = await prisma.product.findMany({
     include: {
-      stockLevels: {
-        include: { warehouse: true },
-      },
+      stockLevels: { include: { warehouse: true } },
     },
     orderBy: { name: "asc" },
   });
@@ -50,13 +48,11 @@ export default async function HomePage() {
           Select a product and warehouse to reserve inventory.
         </p>
       </div>
-
       {error && (
         <div className="bg-[var(--danger-bg)] border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm mb-8">
           {error}
         </div>
       )}
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
